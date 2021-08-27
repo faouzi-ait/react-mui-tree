@@ -1,13 +1,21 @@
 import React from "react";
 import TreeView from "@material-ui/lab/TreeView";
+import TreeItem from "@material-ui/lab/TreeItem";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import TreeItem from "@material-ui/lab/TreeItem";
 import { Checkbox, FormControlLabel } from "@material-ui/core";
-import { data } from "./data/sampleData";
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+
 import { flatten, getSelectedObjects } from './utils/utilities'
+import { data } from "./data/sampleData";
 
 import './App.css';
+
+const theme = createTheme({
+  typography: {
+    htmlFontSize: 13,
+  },
+});
 
 function App() {
   const [selected, setSelectedId] = React.useState([]);
@@ -92,14 +100,16 @@ function App() {
   );
 
   return (
-    <div className="App">    
-      <TreeView
-        defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpanded={["0", "3", "4", "5", "6"]}
-        defaultExpandIcon={<ChevronRightIcon />}
-      >
-        {renderTree(data)}
-      </TreeView>
+    <div className="App">  
+    <ThemeProvider theme={theme}>
+        <TreeView
+          defaultCollapseIcon={<ExpandMoreIcon />}
+          defaultExpanded={["0", "3", "4", "5", "6"]}
+          defaultExpandIcon={<ChevronRightIcon />}
+        >
+          {renderTree(data)}
+        </TreeView>
+      </ThemeProvider>  
     </div>
   );
 }
