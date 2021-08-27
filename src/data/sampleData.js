@@ -32,7 +32,13 @@ export const data = {
       children: [
         {
           id: "6",
-          name: "Child - 6"
+          name: "Child - 6",
+          children: [
+        {
+          id: "88",
+          name: "Child - 88"
+        }
+      ]
         }
       ]
     }

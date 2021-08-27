@@ -5,11 +5,22 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import TreeItem from "@material-ui/lab/TreeItem";
 import { Checkbox, FormControlLabel } from "@material-ui/core";
 import { data } from "./data/sampleData";
+import { flatten, getSelectedObjects } from './utils/utilities'
 
 import './App.css';
 
 function App() {
-  const [selected, setSelected] = React.useState([]);
+  const [selected, setSelectedId] = React.useState([]);
+  const [flattenedData, setFlattenedData] = React.useState([]);
+
+  React.useEffect(() => {
+    setFlattenedData([...new Set(flatten(data.children))])
+  }, [])
+
+  const retrievedDataObjects = getSelectedObjects(flattenedData, selected)
+
+  console.log(selected)
+  console.log(retrievedDataObjects)
 
   function getChildById(node, id) {
     let array = [];
@@ -52,8 +63,7 @@ function App() {
       : selected.filter((value) => !allNode.includes(value));
 
     array = array.filter((v, i) => array.indexOf(v) === i);
-
-    setSelected(array);
+    setSelectedId(array);
   }
 
   const renderTree = (nodes) => (
@@ -65,9 +75,7 @@ function App() {
           control={
             <Checkbox
               checked={selected.some((item) => item === nodes.id)}
-              onChange={(event) =>
-                getOnChange(event.currentTarget.checked, nodes)
-              }
+              onChange={(event) => getOnChange(event.currentTarget.checked, nodes)}
               onClick={(e) => e.stopPropagation()}
               color = "primary"
             />
@@ -83,14 +91,11 @@ function App() {
     </TreeItem>
   );
 
-  // LIST OF SELECTED ITEM
-  console.log(selected)
-
   return (
     <div className="App">    
       <TreeView
         defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpanded={["0"]}
+        defaultExpanded={["0", "3", "4", "5", "6"]}
         defaultExpandIcon={<ChevronRightIcon />}
       >
         {renderTree(data)}
