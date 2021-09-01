@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import TreeView from "@material-ui/lab/TreeView";
 import TreeItem from "@material-ui/lab/TreeItem";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -6,7 +6,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { Checkbox, FormControlLabel } from "@material-ui/core";
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 
-import { flatten, getSelectedObjects } from './utils/utilities'
+import { flatten, getSelectedObjects, filterTree } from './utils/utilities'
 import { data } from "./data/sampleData";
 
 import './App.css';
@@ -18,6 +18,7 @@ const theme = createTheme({
 });
 
 function App() {
+  const [input, setInput] = useState("")
   const [selected, setSelectedId] = React.useState([]);
   const [flattenedData, setFlattenedData] = React.useState([]);
 
@@ -99,15 +100,22 @@ function App() {
     </TreeItem>
   );
 
+  const filteredTree = {
+    id: "0",
+    name: "Parent",
+    children: filterTree(data.children, input)
+  }
+  
   return (
     <div className="App">  
+    <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Search Case Sensitive" />
     <ThemeProvider theme={theme}>
         <TreeView
           defaultCollapseIcon={<ExpandMoreIcon />}
           defaultExpanded={["0", "3", "4", "5", "6"]}
           defaultExpandIcon={<ChevronRightIcon />}
         >
-          {renderTree(data)}
+          {renderTree(filteredTree)}
         </TreeView>
       </ThemeProvider>  
     </div>
